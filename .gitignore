@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+ENV/
+*.pkl
+*.csv
+# If the model and dataset are large, they should probably be ignored or handled with LFS
+# But for now, user might want to keep model.pkl if they plan to use it.
+# I'll leave them for now unless they are very big.
+# 20MB for model.pkl is okay for Git but not ideal.
+# I will ignore them to encourage clean code and provide instructions if they want to upload them.
+# Actually, I'll include them for now since they are already there and part of the repo.

@@ -1,0 +1,81 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[T1]{fontenc} % Fixes the << >> symbols
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning}
+
+\begin{document}
+
+\begin{tikzpicture}[
+    font=\sffamily,
+    % Style for Use Cases (Ellipses)
+    usecase/.style={
+        ellipse, 
+        draw, 
+        minimum width=3.2cm, 
+        minimum height=1cm, 
+        align=center, 
+        inner sep=4pt,
+        fill=white
+    },
+    % Style for Actor Drawing
+    actor_drawing/.style={
+        circle, 
+        draw, 
+        minimum size=0.5cm, 
+        inner sep=0pt
+    },
+    arrow/.style={-Stealth, thick},
+    % Relationship style (dashed lines for include)
+    rel/.style={-Stealth, dashed, thick, font=\scriptsize\itshape}
+]
+
+    % --- SYSTEM BOUNDARY ---
+    \draw[thick, rounded corners=3pt] (0, -9.5) rectangle (12.2, 2.8);
+    \node at (6.1, 2.3) {\Large \underline{AgriPredict System}};
+
+    % --- SINGLE ACTOR (Farmer) ---
+    \node[actor_drawing] (farmerHead) at (-2.5, -2.5) {};
+    \draw[thick] (farmerHead.south) -- ++(0,-0.8) coordinate (neck);
+    \draw[thick] (neck) -- ++(-0.4,-0.5);
+    \draw[thick] (neck) -- ++(0.4,-0.5);
+    \draw[thick] ($(farmerHead.south)!0.3!(neck)$) -- ++(-0.5,0.2);
+    \draw[thick] ($(farmerHead.south)!0.3!(neck)$) -- ++(0.5,0.2);
+    \node[below=1.6cm of farmerHead, align=center] {Farmer\\(User)};
+
+    % --- MAIN USE CASES (Left Column) ---
+    \node[usecase] (enterDetails)   at (3.2, 1.2)    {Enter Crop\\Details};
+    \node[usecase] (predictPrice)   at (3.2, -0.5)   {Predict\\Crop Price};
+    \node[usecase] (viewResults)    at (3.2, -2.5)   {View\\Prediction Results};
+    \node[usecase, minimum width=3.8cm] (cropDoctor) at (3.2, -5.5) {Use Crop Doctor AI};
+    
+    % --- SUB USE CASES (Right Column) ---
+    
+    % Sub-cases for View Results
+    \node[usecase, minimum width=3cm] (viewTrends)    at (9.8, -1.8) {View Price\\Trends};
+    \node[usecase, minimum width=3cm] (viewHistory)   at (9.8, -3.2) {View Prediction\\History};
+
+    % Sub-cases for Crop Doctor
+    \node[usecase, minimum width=3cm] (diseaseInfo)   at (9.8, -5.0)  {Get Disease\\Information};
+    \node[usecase, minimum width=3cm] (treatment)     at (9.8, -6.5)  {Get Treatment\\Advice};
+    \node[usecase, minimum width=3cm] (prevention)    at (9.8, -8.0)  {Get Prevention\\Tips};
+
+    % --- CONNECTIONS ---
+    
+    % Farmer to Main Use Cases (Solid Arrows)
+    \draw[arrow] (farmerHead.east) -- (enterDetails.west);
+    \draw[arrow] (farmerHead.east) -- (predictPrice.west);
+    \draw[arrow] (farmerHead.east) -- (viewResults.west);
+    \draw[arrow] (farmerHead.east) -- (cropDoctor.west);
+
+    % Relationships for View Results (Dashed Arrows with include)
+    \draw[rel] (viewResults.east) -- (viewTrends.west) node[midway, above, sloped] {<<include>>};
+    \draw[rel] (viewResults.east) -- (viewHistory.west) node[midway, below, sloped] {<<include>>};
+
+    % Relationships for Crop Doctor (Dashed Arrows with include)
+    \draw[rel] (cropDoctor.east) -- (diseaseInfo.west) node[midway, above, sloped] {<<include>>};
+    \draw[rel] (cropDoctor.east) -- (treatment.west) node[midway, above, sloped] {<<include>>};
+    \draw[rel] (cropDoctor.east) -- (prevention.west) node[midway, below, sloped] {<<include>>};
+
+\end{tikzpicture}
+
+\end{document}
