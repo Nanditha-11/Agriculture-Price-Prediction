@@ -11,11 +11,19 @@ app.secret_key = secrets.token_hex(16)
 
 # MongoDB Connection
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
 db = client['agripredict_db']
 predictions_collection = db['predictions']
 feedback_collection = db['feedback']
 alerts_collection = db['alerts']
+ 
+ @app.route('/check-db')
+ def check_db():
+     try:
+         client.admin.command('ping')
+         return jsonify({"status": "success", "message": "Connected to MongoDB Atlas!"})
+     except Exception as e:
+         return jsonify({"status": "error", "message": str(e)}), 500
 
 # Function to convert month number to season
 def get_season_from_month(month_num):
