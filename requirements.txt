@@ -1,6 +1,5 @@
-Flask
-pymongo[srv]
-requests
-gunicorn
-python-dotenv
-dnspython
+Flask==3.0.3
+gunicorn==22.0.0
+pymongo[srv]==4.9.1
+python-dotenv==1.0.1
+dnspython==2.6.1
