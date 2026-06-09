@@ -1,0 +1,6 @@
+Flask
+pymongo[srv]
+requests
+gunicorn
+python-dotenv
+dnspython

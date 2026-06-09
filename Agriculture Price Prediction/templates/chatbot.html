@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriPredict | Crop Doctor AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: #10b981;
+            font-size: 2rem;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-outline {
+            padding: 8px 20px;
+            border: 1px solid #10b981;
+            background: transparent;
+            color: #10b981;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-outline:hover {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            height: fit-content;
+        }
+
+        .sidebar h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar h2 i {
+            color: #10b981;
+        }
+
+        .crop-selector {
+            margin-bottom: 25px;
+        }
+
+        .crop-selector label {
+            display: block;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .crop-selector select {
+            width: 100%;
+            padding: 12px;
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .quick-actions {
+            margin-top: 25px;
+        }
+
+        .quick-actions h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #94a3b8;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateX(5px);
+        }
+
+        .action-btn i {
+            color: #10b981;
+            width: 20px;
+        }
+
+        .disease-info {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .disease-info h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #10b981;
+        }
+
+        .disease-info p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Chat Area */
+        .chat-area {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            height: 700px;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-header-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .chat-header-info h1 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .chat-header-info p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: #3b82f6;
+        }
+
+        .message-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 16px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message.user .message-content {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .message-text {
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px;
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .chat-input button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .suggestions {
+            padding: 0 20px 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-chip {
+            padding: 8px 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .suggestion-chip:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-seedling"></i>
+            <span>AgriPredict</span>
+        </div>
+        <div class="nav-links">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <a href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="/chatbot" class="active"><i class="fas fa-robot"></i> Crop Doctor</a>
+        </div>
+        <div class="nav-buttons">
+            <a href="/" class="btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>
+                <i class="fas fa-leaf"></i>
+                Crop Health Assistant
+            </h2>
+
+            <div class="crop-selector">
+                <label><i class="fas fa-seedling"></i> Select Crop</label>
+                <select id="crop-select">
+                    <option value="general">General Agriculture</option>
+                    <option value="barley">🌾 Barley</option>
+                    <option value="coconut">🥥 Coconut</option>
+                    <option value="coffee">☕ Coffee</option>
+                    <option value="cotton">🧶 Cotton</option>
+                    <option value="ginger">🫚 Ginger</option>
+                    <option value="groundnut">🥜 Groundnut</option>
+                    <option value="jowar">🌾 Jowar</option>
+                    <option value="maize">🌽 Maize</option>
+                    <option value="millets">🌾 Millets</option>
+                    <option value="rice">🌾 Rice</option>
+                    <option value="sugar">🍬 Sugar</option>
+                    <option value="sugarcane">🎋 Sugarcane</option>
+                    <option value="sunflower">🌻 Sunflower</option>
+                    <option value="tea">🍃 Tea</option>
+                    <option value="turmeric">🟡 Turmeric</option>
+                    <option value="wheat">🌾 Wheat</option>
+                </select>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Quick Questions</h3>
+                <button class="action-btn" onclick="askQuestion('What are common diseases in this crop?')">
+                    <i class="fas fa-bug"></i> Common Diseases
+                </button>
+                <button class="action-btn" onclick="askQuestion('How to prevent diseases?')">
+                    <i class="fas fa-shield-alt"></i> Prevention Tips
+                </button>
+                <button class="action-btn" onclick="askQuestion('Organic treatment options?')">
+                    <i class="fas fa-leaf"></i> Organic Treatment
+                </button>
+                <button class="action-btn" onclick="askQuestion('Best fertilizer for this crop?')">
+                    <i class="fas fa-flask"></i> Fertilizer Advice
+                </button>
+                <button class="action-btn" onclick="askQuestion('Current market price?')">
+                    <i class="fas fa-rupee-sign"></i> Market Price
+                </button>
+            </div>
+
+            <div class="disease-info" id="disease-info">
+                <h3><i class="fas fa-info-circle"></i> Quick Disease Guide</h3>
+                <p>Select a crop above to see common diseases and treatments.</p>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="chat-header-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chat-header-info">
+                    <h1>Crop Doctor AI</h1>
+                    <p>Ask me about crop diseases, treatments, and farming advice</p>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will appear here -->
+            </div>
+
+            <div class="suggestions" id="suggestions">
+                <span class="suggestion-chip" onclick="askQuestion('My crop leaves have spots')">Leaves have spots</span>
+                <span class="suggestion-chip" onclick="askQuestion('Leaves turning yellow')">Leaves turning yellow</span>
+                <span class="suggestion-chip" onclick="askQuestion('Wilting problem')">Wilting problem</span>
+                <span class="suggestion-chip" onclick="askQuestion('Pest control')">Pest control</span>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Type your question here..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messagesContainer = document.getElementById('chat-messages');
+        let userInput = document.getElementById('user-input');
+        let cropSelect = document.getElementById('crop-select');
+        let diseaseInfo = document.getElementById('disease-info');
+
+        // Welcome message
+        addMessage('Hello! I\'m your Crop Doctor AI assistant. I can help you with:\n\n🌱 Disease identification and treatment\n🧪 Organic and chemical control methods\n🌾 Prevention strategies\n💰 Market prices and trends\n\nSelect a crop from the sidebar and ask me anything!', 'bot');
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage(message, 'user');
+            userInput.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        crop: cropSelect.value
+                    })
+                });
+
+                const result = await response.json();
+
+                // Remove typing indicator
+                removeTypingIndicator();
+
+                if (result.success) {
+                    addMessage(result.response, 'bot');
+                    
+                    // Update disease info if relevant
+                    if (message.toLowerCase().includes('disease') || message.toLowerCase().includes('treatment')) {
+                        loadDiseaseInfo(cropSelect.value);
+                    }
+                } else {
+                    addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('Network error. Please check your connection.', 'bot');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas ${sender === 'user' ? 'fa-user' : 'fa-robot'}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${formatMessage(text)}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function formatMessage(text) {
+            // Convert URLs to links
+            text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+            
+            // Convert line breaks to <br>
+            text = text.replace(/\n/g, '<br>');
+            
+            return text;
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'message bot';
+            indicator.id = 'typing-indicator';
+            indicator.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            messagesContainer.appendChild(indicator);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function askQuestion(question) {
+            userInput.value = question;
+            sendMessage();
+        }
+
+        async function loadDiseaseInfo(crop) {
+            try {
+                const response = await fetch(`/crop-diseases/${crop}`);
+                const result = await response.json();
+                
+                if (result.success && result.diseases) {
+                    let html = '<h3><i class="fas fa-info-circle"></i> Common Diseases</h3>';
+                    result.diseases.slice(0, 2).forEach(disease => {
+                        html += `
+                            <div style="margin-top: 15px;">
+                                <p style="color: #10b981; font-weight: 500;">🔸 ${disease.name}</p>
+                                <p style="color: #94a3b8; font-size: 0.85rem; margin: 5px 0;">Symptoms: ${disease.symptoms}</p>
+                                <p style="color: #94a3b8; font-size: 0.85rem;">Treatment: ${disease.treatment}</p>
+                            </div>
+                        `;
+                    });
+                    diseaseInfo.innerHTML = html;
+                }
+            } catch (e) {
+                console.log("Failed to load disease info");
+            }
+        }
+
+        // Load disease info when crop changes
+        cropSelect.addEventListener('change', () => {
+            loadDiseaseInfo(cropSelect.value);
+        });
+
+        // Load initial disease info
+        loadDiseaseInfo('rice');
+    </script>
+</body>
+</html>
